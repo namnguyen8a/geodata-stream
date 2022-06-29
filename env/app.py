@@ -12,13 +12,13 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
 def read_item(request: Request):
-    return templates.TemplateResponse("bus.html", {"request": request})
+    return templates.TemplateResponse("bus2.html", {"request": request})
 
 #Consumer API
-@app.get("/bus/{topic_name}")
+@app.get("/topic/{topic_name}")
 def get_message(topic_name: str):
     client = get_kafka_client()
     def events():
         for i in client.topics[topic_name].get_simple_consumer():
             yield 'data:{0}\n\n'.format(i.value.decode())
-    return Response(events(), mimetype="test/event-stream")
+    return Response(events(), mimetype="text/event-stream")
